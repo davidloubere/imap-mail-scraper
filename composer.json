@@ -1,0 +1,21 @@
+{
+    "name": "davidloubere/imap-mail-scraper",
+    "description": "IMAP mail scraper",
+    "authors": [
+        {
+            "name": "David Loubère",
+            "email": "me@davidloubere.com"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=5.6",
+        "guzzlehttp/guzzle": "6.*",
+        "symfony/validator": "2.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "ImapMailScraper": "src/"
+        }
+    }
+}
