@@ -306,11 +306,7 @@ class MailStorage
                     $body = imap_fetchbody($this->stream, $messageUid, $section, FT_UID);
 
                     if (isset($part->encoding)) {
-                        switch ($part->encoding) {
-                            case ENCQUOTEDPRINTABLE:
-                                $body = imap_qprint($body);
-                                break;
-                        }
+                        $body = $this->decodeBody($body, $part->encoding);
                     }
 
                     $charset = null;
@@ -342,6 +338,35 @@ class MailStorage
         }
 
         return $bodies;
+    }
+
+    /**
+     * @param string $body
+     * @param int $transfertEncoding
+     *
+     * @return string
+     */
+    protected function decodeBody($body, $transfertEncoding)
+    {
+        switch($transfertEncoding) {
+            case ENC7BIT;
+            case ENC8BIT;
+            case ENCBINARY;
+                break;
+
+            case ENCBASE64;
+                $body = imap_base64($body);
+                break;
+
+            case ENCQUOTEDPRINTABLE;
+                $body = imap_qprint($body);
+                break;
+            
+            case ENCOTHER;
+                break;
+        }
+
+        return $body;
     }
 
     /**
