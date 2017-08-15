@@ -3,6 +3,7 @@
 namespace ImapMailScraper\Parse;
 
 use ImapMailScraper\Crawl\Crawler;
+use ImapMailScraper\Crawl\Exception\CrawlerException;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validation;
 
@@ -46,7 +47,7 @@ class Parser
                 $href = $sourceUrl = $aNode->getAttribute('href');
 
                 if (!$this->isValidUrl($href)) {
-                    continue;
+                    continue; //TODO track error "invalid url"
                 }
 
                 $url = $href;
@@ -59,7 +60,11 @@ class Parser
 
                         $url = $followedRedirects[$hrefHash];
                     } else {
-                        $urls = $this->crawler->followRedirects($href);
+                        try {
+                            $urls = $this->crawler->followRedirects($href);
+                        } catch(CrawlerException $crawlerException) {
+                            continue; //TODO track error "unable to follow url"
+                        }
 
                         $url = $urls['effective'];
 
@@ -115,11 +120,11 @@ class Parser
 
         return $links;
     }
-
+    
     /**
-     * string $html.
+     * @param string $html
      *
-     * @return bool|mixed
+     * @return bool|mixed|string
      */
     public function parseMetaRedirectUrl($html)
     {
