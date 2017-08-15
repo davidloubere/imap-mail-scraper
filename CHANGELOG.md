@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.0.3 (2017-08-15)
+
+- Add method to retrieve HTML document title
+- Skip current link on follow redirects exception + cosmetic
+
 ## 1.0.2 (2017-08-15)
 
 - Decode BASE64 bodies
