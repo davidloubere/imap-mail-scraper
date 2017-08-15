@@ -120,7 +120,28 @@ class Parser
 
         return $links;
     }
-    
+
+    /**
+     * @param string $html
+     *
+     * @return bool|string
+     */
+    public function parseTitle($html)
+    {
+        $dom = new \DOMDocument();
+        @$dom->loadHTML($html);//FIXME
+
+        if ($dom->nodeType === XML_HTML_DOCUMENT_NODE) {
+            $titleElements = $dom->getElementsByTagName('title');
+
+            if ($titleElements->length === 1) {
+                return $titleElements->item(0)->textContent;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * @param string $html
      *
